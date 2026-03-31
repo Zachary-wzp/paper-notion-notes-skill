@@ -1,0 +1,5 @@
+display_name: Paper Notion Notes
+short_description: Read papers into Notion with structured notes and optional key figures.
+default_prompt: >-
+  Read a paper, store it in the target Notion database as a structured note,
+  and if a PDF is available, crop and upload 1 to 3 key figures into the same note page.
