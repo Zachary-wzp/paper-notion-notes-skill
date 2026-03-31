@@ -1,8 +1,22 @@
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 # paper-notion-notes
 
 `paper-notion-notes` is a Codex skill for turning research papers into structured Notion notes.
 
 It is designed for a paper-reading workflow that already has a target Notion database and note template. The skill focuses on the Notion layer: creating a paper record, writing metadata, storing a structured note, and optionally extracting and uploading key figures from the PDF.
+
+## Current Version
+
+This repository currently publishes the first public release of version 2.
+
+Version 2 introduces:
+
+- explicit two-mode workflow: `MCP-only` and `API+Images`
+- upstream paper-reading routing:
+  - ordinary PDF / abstract / pasted body text -> `paper-glance`
+  - arXiv URL with structured extraction needs -> `read-arxiv-paper`
+- local scripts for record creation, figure cropping, and figure upload
 
 ## Features
 
@@ -13,15 +27,6 @@ It is designed for a paper-reading workflow that already has a target Notion dat
 - Auto-crop 1 to 3 key figures from a PDF
 - Upload cropped figures into the same Notion note page
 
-## Version
-
-This repository contains version 2 of the skill.
-
-Version 2 introduces explicit routing to upstream reading skills:
-
-- Ordinary PDF / abstract / pasted body text -> `paper-glance`
-- arXiv URL with structured extraction needs -> `read-arxiv-paper`
-
 ## Modes
 
 ### 1. MCP-only
@@ -30,9 +35,9 @@ Use this mode when you only want text notes and metadata written to Notion.
 
 Characteristics:
 
-- Does not require `NOTION_API_KEY`
-- Uses Notion MCP tools
-- Good for text-only note workflows
+- does not require `NOTION_API_KEY`
+- uses Notion MCP tools
+- good for text-only note workflows
 
 ### 2. API+Images
 
@@ -40,9 +45,9 @@ Use this mode when you want key figures cropped from the PDF and embedded into t
 
 Characteristics:
 
-- Requires `NOTION_API_KEY`
-- Uses local Python scripts plus the Notion HTTP API
-- Good for full text + image paper notes
+- requires `NOTION_API_KEY`
+- uses local Python scripts plus the Notion HTTP API
+- good for full text + image paper notes
 
 ## Repository Structure
 
@@ -53,6 +58,9 @@ Characteristics:
 ├── SKILL.md
 ├── .env.example
 ├── .gitignore
+├── LICENSE
+├── agents/
+│   └── openai.yaml
 └── scripts/
     ├── notion_embed_images.py
     ├── paper_note_create.py
@@ -65,36 +73,9 @@ Characteristics:
 
 Creates a new paper record in the target Notion database and fills metadata fields.
 
-Typical usage:
-
-```powershell
-python scripts/paper_note_create.py \
-  --name "Kai Greshake et al." \
-  --title "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" \
-  --author "Kai Greshake; Sahar Abdelnabi; Shailesh Mishra; Christoph Endres; Thorsten Holz; Mario Fritz" \
-  --year 2023 \
-  --publication "arXiv" \
-  --date 2026-03-31 \
-  --url "https://arxiv.org/abs/2302.12173" \
-  --doi "https://doi.org/10.48550/arXiv.2302.12173" \
-  --tag "对抗攻击" \
-  --template
-```
-
 ### `scripts/paper_note_figures.py`
 
 Crops requested figures from a paper PDF and uploads them into the target Notion note page.
-
-Typical usage:
-
-```powershell
-python scripts/paper_note_figures.py \
-  <page_id> \
-  "<pdf_path>" \
-  --figure-number 1 \
-  --figure-number 2 \
-  --figure-number 3
-```
 
 ### `scripts/notion_embed_images.py`
 
@@ -117,7 +98,7 @@ NOTION_VERSION=2026-03-11
 Notes:
 
 - `.env` is only required for `API+Images` mode
-- If you only use Notion MCP tools and do not upload images through local scripts, you do not need `NOTION_API_KEY`
+- if you only use Notion MCP tools and do not upload images through local scripts, you do not need `NOTION_API_KEY`
 
 ## Requirements
 
@@ -151,4 +132,4 @@ That means:
 
 ## License
 
-No license file is included yet. Add one before wider redistribution if you want explicit reuse terms.
+This repository uses the [MIT License](./LICENSE).

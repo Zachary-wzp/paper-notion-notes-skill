@@ -1,8 +1,22 @@
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 # paper-notion-notes
 
 `paper-notion-notes` 是一个用于将论文整理为 Notion 结构化笔记的 Codex skill。
 
 它适用于已经存在目标 Notion 数据库与笔记模板的论文阅读工作流。这个 skill 的核心职责不是单独“读懂论文”，而是负责 Notion 工作流层：创建文献记录、写入元数据、生成结构化笔记，并在需要时从 PDF 中裁剪关键图片并上传到同一篇 Notion 笔记页面。
+
+## 当前版本
+
+当前仓库发布的是 v2 的第一版公开版本。
+
+v2 的核心变化包括：
+
+- 明确拆分为两种工作模式：`MCP-only` 与 `API+Images`
+- 明确接入上游读论文 skill 路由：
+  - 普通 PDF / 摘要 / 粘贴正文 -> `paper-glance`
+  - 需要更结构化抽取的 arXiv 链接 -> `read-arxiv-paper`
+- 新增本地脚本用于建记录、裁图和上传图片
 
 ## 功能
 
@@ -12,15 +26,6 @@
 - 将论文阅读步骤路由到已有读论文 skill，而不是重复实现
 - 从 PDF 自动裁剪 1 到 3 张关键图片
 - 将裁剪后的图片上传到同一篇 Notion 笔记页面
-
-## 当前版本
-
-这个仓库对应的是 skill 的第二个版本（v2）。
-
-v2 的核心变化是明确引入上游论文阅读 skill 路由：
-
-- 普通 PDF / 摘要 / 粘贴正文 -> `paper-glance`
-- arXiv 链接且需要更结构化抽取 -> `read-arxiv-paper`
 
 ## 两种模式
 
@@ -53,6 +58,9 @@ v2 的核心变化是明确引入上游论文阅读 skill 路由：
 ├── SKILL.md
 ├── .env.example
 ├── .gitignore
+├── LICENSE
+├── agents/
+│   └── openai.yaml
 └── scripts/
     ├── notion_embed_images.py
     ├── paper_note_create.py
@@ -65,36 +73,9 @@ v2 的核心变化是明确引入上游论文阅读 skill 路由：
 
 用于在目标 Notion 数据库中创建一条新的论文记录，并写入元数据。
 
-示例：
-
-```powershell
-python scripts/paper_note_create.py \
-  --name "Kai Greshake et al." \
-  --title "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" \
-  --author "Kai Greshake; Sahar Abdelnabi; Shailesh Mishra; Christoph Endres; Thorsten Holz; Mario Fritz" \
-  --year 2023 \
-  --publication "arXiv" \
-  --date 2026-03-31 \
-  --url "https://arxiv.org/abs/2302.12173" \
-  --doi "https://doi.org/10.48550/arXiv.2302.12173" \
-  --tag "对抗攻击" \
-  --template
-```
-
 ### `scripts/paper_note_figures.py`
 
 用于从论文 PDF 中裁剪指定图号，并将图片上传到指定 Notion 笔记页。
-
-示例：
-
-```powershell
-python scripts/paper_note_figures.py \
-  <page_id> \
-  "<pdf_path>" \
-  --figure-number 1 \
-  --figure-number 2 \
-  --figure-number 3
-```
 
 ### `scripts/notion_embed_images.py`
 
@@ -149,6 +130,6 @@ v2 的图片裁剪仍然是启发式逻辑。
 5. 按需裁剪并上传 1 到 3 张关键图片
 6. 将记录标记为完成
 
-## License
+## 许可证
 
-当前仓库还没有附带 license 文件。如果你希望公开明确复用条件，建议后续补充。
+本仓库使用 [MIT License](./LICENSE)。
